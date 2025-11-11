@@ -44,18 +44,28 @@ app.get('/my-products', async(req,res)=>{
     res.send(result)
 })
 //get data for product details in maincollection
-app.get('/products/:id', async (req, res)=>{
-    const {id} = req.params
-    const result = await mainCollection.findOne({_id: id})
-    res.send({
-        success : true,
-        result
-    })
-})
+app.get('/products/:id', async (req, res) => {
+  const { id } = req.params;
+
+  if (ObjectId.isValid(id)) {
+    query = { _id: new ObjectId(id) };
+  } else {
+    query = { _id: id };
+  }
+  const result = await mainCollection.findOne(query);
+
+  res.send({ result });
+});
+//homepage short showing data
+app.get('/sortproducts', async (req, res) => {
+  const result = await mainCollection.find().limit(6).toArray();
+  res.send(result);
+});
 //get data for product details in my-collection
 app.get('/my-products/:id', async (req, res)=>{
     const {id} = req.params
     const result = await myCollection.findOne({_id: new ObjectId(id)})
+    console.log(result)
     res.send({
         success : true,
         result
@@ -84,3 +94,6 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
+
