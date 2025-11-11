@@ -23,12 +23,22 @@ async function run() {
     await client.connect();
     const db = client.db('realstate_db')
     const mainCollection = db.collection('products')
+    const myCollection = db.collection('my_products')
 // get all product
 app.get('/products', async (req,res)=>{
     const result = await mainCollection.find().toArray()
     res.send(result)
 })
+// add property insert one
+app.post('/my-products', (req,res)=>{
+ const data = req.body
 
+ const result = myCollection.insertOne(data)
+ res.send({
+    success:true,
+    result
+ })
+})
 
 
 
