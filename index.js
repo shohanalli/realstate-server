@@ -6,10 +6,10 @@ const port = 3000
 app.use(cors())
 app.use(express.json())
 
-
+// user real_state_db
+// pass  mDEYjmNdjgd0CaJ7
 //mongodb
-const uri = "mongodb+srv://<db_username>:<db_password>@cluster0.11tuu0x.mongodb.net/?appName=Cluster0";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const uri = "mongodb+srv://real_state_db:mDEYjmNdjgd0CaJ7@cluster0.11tuu0x.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -20,27 +20,20 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    // Send a ping to confirm a successful connection
+    
+
+
+
+
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    // Ensures that the client will close when you finish/error
     await client.close();
   }
 }
 run().catch(console.dir);
-
-
-
-
-
-
-
-
-
-
 
 
 app.get('/', (req, res) => {
