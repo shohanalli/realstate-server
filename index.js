@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = 3000
 app.use(cors())
@@ -30,16 +30,37 @@ app.get('/products', async (req,res)=>{
     res.send(result)
 })
 // add property insert one
-app.post('/my-products', (req,res)=>{
+app.post('/my-products', async(req,res)=>{
  const data = req.body
-
- const result = myCollection.insertOne(data)
+ const result = await myCollection.insertOne(data)
  res.send({
     success:true,
     result
  })
 })
-
+// my property data api link
+app.get('/my-products', async(req,res)=>{
+  const result = await myCollection.find().toArray()
+    res.send(result)
+})
+//get data for product details in maincollection
+app.get('/products/:id', async (req, res)=>{
+    const {id} = req.params
+    const result = await mainCollection.findOne({_id: id})
+    res.send({
+        success : true,
+        result
+    })
+})
+//get data for product details in my-collection
+app.get('/my-products/:id', async (req, res)=>{
+    const {id} = req.params
+    const result = await myCollection.findOne({_id: new ObjectId(id)})
+    res.send({
+        success : true,
+        result
+    })
+})
 
 
 
