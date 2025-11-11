@@ -1,15 +1,15 @@
 const express = require('express')
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors')
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 const port = 3000
 app.use(cors())
 app.use(express.json())
 
-// user real_state_db
-// pass  mDEYjmNdjgd0CaJ7
 //mongodb
-const uri = "mongodb+srv://real_state_db:mDEYjmNdjgd0CaJ7@cluster0.11tuu0x.mongodb.net/?appName=Cluster0";
+
+
+const uri = "mongodb+srv://realstate-db:c02ew2eZIp0bUEkm@cluster0.11tuu0x.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -21,7 +21,16 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    
+    const db = client.db('realstate_db')
+    const mainCollection = db.collection('products')
+// get all product
+app.get('/products', async (req,res)=>{
+    const result = await mainCollection.find().toArray()
+    res.send(result)
+})
+
+
+
 
 
 
@@ -30,7 +39,8 @@ async function run() {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
-    await client.close();
+    // Ensures that the client will close when you finish/error
+    // await client.close();
   }
 }
 run().catch(console.dir);
