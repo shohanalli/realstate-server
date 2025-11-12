@@ -43,6 +43,21 @@ app.get('/my-products', async(req,res)=>{
   const result = await mainCollection.find({email: email}).toArray()
     res.send(result)
 })
+//update data in my collection
+app.put('/products/:id', async(req,res)=>{
+  const {id} = req.params.id
+ const data = req.body
+  const objectId = new ObjectId(id)
+const fillter = {_id: objectId}
+const update = {
+  $set: data
+}
+const result = await mainCollection.updateOne(fillter, update)
+ res.send({
+    success:true,
+    result
+ })
+})
 //get data for product details in maincollection
 app.get('/products/:id', async (req, res) => {
   const { id } = req.params;
@@ -58,7 +73,7 @@ app.get('/products/:id', async (req, res) => {
 });
 //homepage short showing data 
 app.get('/sortproducts', async (req, res) => {
-  const result = await mainCollection.find().limit(6).toArray();
+  const result = await mainCollection.find().limit(6).sort({ _id: -1 }).toArray();
   res.send(result);
 });
 
