@@ -23,9 +23,10 @@ async function run() {
     await client.connect();
     const db = client.db('realstate_db')
     const mainCollection = db.collection('products')
+    const reviewCollection = db.collection('review')
 // get all product
 app.get('/products', async (req,res)=>{
-    const result = await mainCollection.find().toArray()
+    const result = await mainCollection.find().limit(12).sort({ _id: -1 }).toArray()
     res.send(result)
 })
 // add property insert one
@@ -37,6 +38,20 @@ app.post('/products', async(req,res)=>{
     result
  })
 })
+ //add review data in databes 
+app.post('/review', async(req,res)=>{
+  const data = req.body
+  const result = await reviewCollection.insertOne(data)
+  res.send({
+    result
+  })
+})
+//get data in databes
+app.get('/review', async(req, res)=>{
+  const result = await reviewCollection.find().toArray()
+    res.send(result)
+})
+
 // my property data api link
 app.get('/my-products', async(req,res)=>{
   const email = req.query.email
