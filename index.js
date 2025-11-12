@@ -58,6 +58,15 @@ const result = await mainCollection.updateOne(fillter, update)
     result
  })
 })
+//delete data in my collection
+app.delete('/products/:id', async(req,res)=>{
+  const id = req.params.id
+const result = await mainCollection.deleteOne({_id: new ObjectId(id)})
+ res.send({
+    success:true,
+    result
+ })
+})
 //get data for product details in maincollection
 app.get('/products/:id', async (req, res) => {
   const { id } = req.params;
