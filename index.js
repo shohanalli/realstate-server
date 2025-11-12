@@ -23,16 +23,15 @@ async function run() {
     await client.connect();
     const db = client.db('realstate_db')
     const mainCollection = db.collection('products')
-    const myCollection = db.collection('my_products')
 // get all product
 app.get('/products', async (req,res)=>{
     const result = await mainCollection.find().toArray()
     res.send(result)
 })
 // add property insert one
-app.post('/my-products', async(req,res)=>{
+app.post('/products', async(req,res)=>{
  const data = req.body
- const result = await myCollection.insertOne(data)
+ const result = await mainCollection.insertOne(data)
  res.send({
     success:true,
     result
@@ -40,7 +39,8 @@ app.post('/my-products', async(req,res)=>{
 })
 // my property data api link
 app.get('/my-products', async(req,res)=>{
-  const result = await myCollection.find().toArray()
+  const email = req.query.email
+  const result = await mainCollection.find({email: email}).toArray()
     res.send(result)
 })
 //get data for product details in maincollection
@@ -56,21 +56,12 @@ app.get('/products/:id', async (req, res) => {
 
   res.send({ result });
 });
-//homepage short showing data
+//homepage short showing data 
 app.get('/sortproducts', async (req, res) => {
   const result = await mainCollection.find().limit(6).toArray();
   res.send(result);
 });
-//get data for product details in my-collection
-app.get('/my-products/:id', async (req, res)=>{
-    const {id} = req.params
-    const result = await myCollection.findOne({_id: new ObjectId(id)})
-    console.log(result)
-    res.send({
-        success : true,
-        result
-    })
-})
+
 
 
 
