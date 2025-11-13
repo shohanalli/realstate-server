@@ -21,7 +21,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
     const db = client.db('realstate_db')
     const mainCollection = db.collection('products')
     const reviewCollection = db.collection('review')
@@ -47,9 +47,10 @@ app.post('/review', async(req,res)=>{
     result
   })
 })
-//get data in databes
+//get review data in databes
 app.get('/review', async(req, res)=>{
-  const result = await reviewCollection.find().toArray()
+  const email = req.query.email
+  const result = await reviewCollection.find({email: email}).toArray()
     res.send(result)
 })
 
@@ -108,7 +109,7 @@ app.get('/sortproducts', async (req, res) => {
 
 
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
