@@ -8,24 +8,15 @@ app.use(cors())
 app.use(express.json())
 
 //mongodb
-const uri = mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.11tuu0x.mongodb.net/realstate?retryWrites=true&w=majority&appName=Cluster0;
 
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.11tuu0x.mongodb.net/?appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  },
+  }
 });
-
-// const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.11tuu0x.mongodb.net/?appName=Cluster0`;
-// const client = new MongoClient(uri, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   }
-// });
 
 async function run() {
   try {
